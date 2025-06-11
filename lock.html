@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>zai</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', 'Noto Color Emoji', sans-serif;
+            color: #333;
+            overflow: hidden;
+            position: relative;
+            background: repeating-linear-gradient(
+                45deg,
+                #ff9a9e,
+                #ff9a9e 10px,
+                rgba(255, 255, 255, 0.8) 10px,
+                rgba(255, 255, 255, 0.8) 20px
+            );
+        }
+
+        /* Ensure emojis use the consistent font */
+        .lock-icon, 
+        .error-message,
+        .hearts div,
+        h1,
+        .hint {
+            font-family: 'Noto Color Emoji', 'Arial', sans-serif;
+        }
+
+        /* Add animated overlay for extra effect */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 154, 158, 0.5), rgba(250, 208, 196, 0.5));
+            animation: shine 3s infinite;
+            z-index: 0;
+        }
+
+        @keyframes shine {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 85%;
+            max-width: 400px;
+            border: 3px solid #ff4b6e;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            margin: 20px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid white;
+            border-radius: 28px;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 75, 110, 0.2);
+        }
+
+        /* Add cute corner decorations */
+        .container::after {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 1.5rem;
+            transform: rotate(45deg);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+            color: #ff4b6e;
+            font-size: clamp(1.5rem, 5vw, 2rem);
+        }
+
+        .lock-icon {
+            font-size: clamp(2.5rem, 6vw, 3rem);
+            margin-bottom: 1rem;
+            margin-top: 0;
+            color: #ff4b6e;
+        }
+
+        .date-field-wrapper {
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .date-field-label {
+            position: absolute;
+            top: -0.5em;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 0.5rem;
+            background-color: white;
+            color: #999;
+            font-size: 0.7rem;
+            font-weight: normal;
+            z-index: 1;
+            line-height: 1;
+            text-transform: lowercase;
+            letter-spacing: 0.5px;
+        }
+
+        .date-picker {
+            width: 100%;
+            padding: 1rem;
+            margin: 0;
+            border: 2px solid #ff4b6e;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            text-align: center;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+            background-color: white;
+            position: relative;
+            color: #333;
+        }
+
+        .placeholder-text {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: #333;
+            pointer-events: none;
+            font-size: 1rem;
+            width: 90%;
+            text-align: center;
+            z-index: 2;
+            background: transparent;
+            display: block !important;
+        }
+
+        .date-picker:not(:placeholder-shown) + .placeholder-text {
+            display: none;
+        }
+
+        .date-field-text {
+            font-size: 1.2rem;
+            color: #ff4b6e;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .hint {
+            color: #999;
+            font-style: italic;
+            margin: 0.7rem 0;
+            font-size: 0.75rem;
+            letter-spacing: 0.3px;
+            opacity: 0.9;
+        }
+
+        .error-message {
+            color: #ff4b6e;
+            margin-top: 1rem;
+            display: none;
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .date-picker {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Mobile specific fixes */
+        @media (max-width: 768px) {
+            .date-picker {
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            .date-picker::placeholder {
+                font-size: 0.9rem;
+                opacity: 1 !important;
+                -webkit-text-fill-color: #333;
+            }
+
+            /* Fix for Android */
+            .date-picker::-webkit-input-placeholder {
+                opacity: 1 !important;
+                color: #333;
+            }
+
+            /* Fix for older iOS */
+            .date-picker:-moz-placeholder,
+            .date-picker::-moz-placeholder {
+                opacity: 1 !important;
+                color: #333;
+            }
+
+            .placeholder-text {
+                font-size: 0.95rem;
+                display: block !important;
+                opacity: 1 !important;
+                z-index: 10;
+                width: 85%;
+            }
+
+            .flatpickr-calendar {
+                z-index: 999999 !important;
+            }
+        }
+
+        /* Hide placeholder only when date is selected */
+        .date-picker[value]:not([value=""]) ~ .placeholder-text {
+            display: none !important;
+        }
+
+        /* Ensure placeholder is visible when calendar is closed */
+        .date-picker:not(:focus) ~ .placeholder-text {
+            display: block !important;
+        }
+
+        /* Flatpickr mobile optimization */
+        .flatpickr-calendar {
+            max-width: 95vw !important;
+            font-size: 16px !important;
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .flatpickr-day {
+            height: 40px !important;
+            line-height: 40px !important;
+        }
+
+        .flatpickr-day.selected {
+            background: #ff4b6e !important;
+            border-color: #ff4b6e !important;
+        }
+
+        .flatpickr-day:hover {
+            background: rgba(255, 75, 110, 0.2) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <div class="container">
+        <div class="lock-icon">🔒</div>
+        <h1>This is protected by a date lock! 👀</h1>
+        <div class="date-field-wrapper">
+            <span class="date-field-label">select a date</span>
+            <input type="text" 
+                   id="datePicker" 
+                   class="date-picker" 
+                   placeholder=""
+                   readonly>
+            <div class="placeholder-text">dd/mm/yyyy</div>
+        </div>
+        <p class="hint">Hint: Zai's special day, A dream we never thought would come true. </p>
+        <p class="error-message" id="errorMessage">That's not the right date, try again! 💕</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('datePicker');
+            const placeholder = document.querySelector('.placeholder-text');
+
+            // Initial visibility check
+            if (input.value) {
+                placeholder.style.display = 'none';
+            }
+
+            // Handle flatpickr instance
+            flatpickr("#datePicker", {
+                dateFormat: "Y-m-d",
+                disableMobile: false,
+                allowInput: false,
+                clickOpens: true,
+                onOpen: function() {
+                    placeholder.style.display = 'none';
+                },
+                onClose: function() {
+                    if (!input.value) {
+                        placeholder.style.display = 'block';
+                    }
+                },
+                onChange: function(selectedDates, dateStr) {
+                    const specialDate = "2025-04-23";
+                    const errorMessage = document.getElementById("errorMessage");
+                    
+                    placeholder.style.display = 'none';
+                    
+                    if (dateStr === specialDate) {
+                        createHeartAnimation();
+                        setTimeout(() => {
+                            window.location.href = "wish.html";
+                        }, 3000);
+                    } else {
+                        errorMessage.style.display = "block";
+                        setTimeout(() => {
+                            errorMessage.style.display = "none";
+                            if (!input.value) {
+                                placeholder.style.display = 'block';
+                            }
+                        }, 3000);
+                    }
+                }
+            });
+
+            // Additional mobile handling
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    setTimeout(() => {
+                        placeholder.style.display = 'block';
+                    }, 100);
+                }
+            });
+        });
+
+        function createHeartAnimation() {
+            const hearts = document.getElementById('hearts');
+            const emojis = ['❤️', '🌹', '🎂', '💝', '💖', '💕', '💗', '💓'];
+            const columns = 10;
+            const rows = 10;
+            
+            for (let i = 0; i < columns; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const emoji = document.createElement('div');
+                    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.innerHTML = randomEmoji;
+                    emoji.style.position = 'absolute';
+                    
+                    const xPos = (i / columns) * 100;
+                    const yPos = (j / rows) * 100;
+                    
+                    const randomOffset = 10;
+                    const finalX = xPos + (Math.random() * randomOffset - randomOffset/2);
+                    const finalY = yPos + (Math.random() * randomOffset - randomOffset/2);
+                    
+                    emoji.style.left = finalX + 'vw';
+                    emoji.style.top = finalY + 'vh';
+                    
+                    emoji.style.fontSize = Math.random() * 1.5 + 1.5 + 'rem';
+                    emoji.style.opacity = Math.random() * 0.5 + 0.5;
+                    emoji.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    const delay = Math.random() * 1000;
+                    setTimeout(() => {
+                        emoji.style.animation = `
+                            float-up ${Math.random() * 2 + 4}s linear forwards,
+                            sway ${Math.random() * 3 + 2}s ease-in-out infinite
+                        `;
+                        hearts.appendChild(emoji);
+                    }, delay);
+
+                    setTimeout(() => {
+                        emoji.remove();
+                    }, 4800);
+                }
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float-up {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-120vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+
+            @keyframes sway {
+                0%, 100% {
+                    margin-left: 0;
+                }
+                25% {
+                    margin-left: 20px;
+                }
+                75% {
+                    margin-left: -20px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

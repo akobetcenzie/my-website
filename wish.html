@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday! 🎉</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content {
+            text-align: center;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeIn 2s forwards;
+            margin: 3rem auto 1rem auto;
+            overflow: hidden;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid white;
+            border-radius: 28px;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 75, 110, 0.2);
+        }
+
+        /* Add cute corner decorations */
+        .content::after {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 1.5rem;
+            transform: rotate(45deg);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin: 0.2rem 0;
+            padding: 0.3rem 0.5rem;
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+            animation: float 3s infinite ease-in-out;
+            border: 3px solid #ff4b6e;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid white;
+            border-radius: 28px;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 75, 110, 0.2);
+        }
+
+        .message::after {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 1.5rem;
+            transform: rotate(45deg);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        p {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        .heart {
+            position: fixed;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            animation: floatHeart linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        .photo-frame {
+            width: min(400px, 90vw);
+            height: auto;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 2rem auto;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+            position: relative;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid #ff4b6e;
+            border-radius: 23px;
+            pointer-events: none;
+            box-sizing: border-box;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+            padding: 0;
+            transform-origin: center;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .special-text {
+            font-size: clamp(1.2rem, 5vw, 1.5rem);
+            color: #ff4b6e;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, #ff4b6e, #ffd93d);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            width: 100%;
+            position: relative;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: slideIn 0.6s ease forwards;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            padding-right: calc(50% + 2rem);
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            padding-left: calc(50% + 2rem);
+            text-align: left;
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            border: 2px solid #ff4b6e;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Special styling for the surprise item */
+        .surprise-item .timeline-content {
+            background: rgba(255, 192, 203, 0.95);
+            padding: 1.8rem;
+            border: 3px solid #ff4b6e;
+            box-shadow: 0 8px 20px rgba(255, 75, 110, 0.2);
+            transform: scale(1);
+        }
+
+        .surprise-item .timeline-content:hover {
+            transform: scale(1.05);
+            background: rgba(255, 182, 193, 0.95);
+            box-shadow: 0 12px 25px rgba(255, 75, 110, 0.3);
+        }
+
+        .surprise-item .timeline-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.8rem;
+            border: 4px solid #ff4b6e;
+            background: rgba(255, 192, 203, 0.95);
+            animation: pulse-icon 2s infinite;
+        }
+
+        .surprise-item .timeline-date {
+            font-size: 1.4rem;
+            text-shadow: 1px 1px 2px rgba(255, 75, 110, 0.3);
+        }
+
+        .click-hint {
+            display: inline-block;
+            background: #ff4b6e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            animation: bounce 1s infinite;
+        }
+
+        .timeline-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 3px solid #ff4b6e;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile timeline adjustments */
+        @media (max-width: 768px) {
+            .timeline {
+                padding: 2rem 1rem;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                padding: 0 0 0 60px !important;
+                text-align: left !important;
+                margin-bottom: 2rem;
+            }
+
+            .timeline-icon {
+                left: 30px;
+                transform: translate(-50%, -50%);
+            }
+
+            .timeline-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            .content {
+                padding: 1rem;
+            }
+
+            .message {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            p {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Popup styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+            max-width: 85%;
+            max-height: 85vh;
+            overflow: hidden;
+            animation: popupIn 0.3s ease-out;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 20px;
+            box-sizing: border-box;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #ff4b6e;
+            background: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ff4b6e;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .popup-close:hover {
+            background: #ff4b6e;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .popup-image {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes popupIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse-icon {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 1rem auto;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .timeline {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Happy Birthday Shin!!! 🎂</h1>
+        
+        <div class="message">
+            <p class="special-text">❤️</p>
+            
+            <div class="timeline">
+                <div class="timeline-item" style="animation-delay: 0.2s">
+                    <div class="timeline-icon">🚂</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date"><h2>11 August, 2016 </h2></div>
+                        <p> - Headache in Train </br> - Can we exchange seats? </br> - Sure!</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" style="animation-delay: 0.4s">
+                    <div class="timeline-icon">👥</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date"><h2>FB Friends</h2></div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" style="animation-delay: 0.6s">
+                    <div class="timeline-icon">📱</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date"><h2>Whatsapp Friends</h2></div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" style="animation-delay: 0.8s">
+                    <div class="timeline-icon">🤪</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date"><h2>Bestiezz</h2></div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" style="animation-delay: 0.8s">
+                    <div class="timeline-icon">❤️‍🔥</div>
+                    <div class="timeline-content">
+                        <div class="timeline-date"><h2>Chunkzz</h2></div>
+                        
+                    </div>
+                </div>
+
+                <div class="timeline-item surprise-item" style="animation-delay: 1s">
+                    <div class="timeline-icon">🎁</div>
+                    <div class="timeline-content" onclick="showPopup()">
+                        <div class="timeline-date">Shushh surprise!!</div>
+                        <p>Click to reveal a special moment! ✨</p>
+                        <span class="click-hint">Click to open! 💝</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>hope i made u smile a bit :)
+                happy bday to the women who is smart, caring, loving, inpiring, witty, thoughtful and etc etc. i love your everything from your perfect nose to your loud laugh to your silky hair to your way of speaking english to your fun talks to your lullaby to  your thought process and much more :) ,  i miss your voice but i hope you are enjoying your bday .thank you for being that very good friend with whom i can share eveything with. hope you achieve everything you have dreamt of and i will always wish the best for you because you deseve the best! .</p>
+            <p class="special-text">happy bday dearest friendd!</p>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="hidePopup()">&times;</span>
+            <img src="a.jpeg" alt="Our Special Moment" class="popup-image">
+        </div>
+    </div>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hidePopup();
+            }
+        });
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+
+            // Remove heart after animation
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 300);
+
+        // Create initial batch of hearts
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 300);
+        }
+    </script>
+</body>
+</html> 
