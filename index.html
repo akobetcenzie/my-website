@@ -314,7 +314,7 @@
 </head>
 <body>
     <div class="countdown-container">
-        <div class="countdown-text">⚠️ This site will automatically get removed on June 13th, 10:00 AM ⚠️</div>
+        <div class="countdown-text">⚠️ Access to this site will be automatically disabled after 13th June 10:00 AM IST ⚠️</div>
         <div class="countdown-timer" id="countdown">Loading...</div>
     </div>
     <div class="hearts" id="hearts"></div>
@@ -339,7 +339,7 @@
         // Add countdown timer functionality
         function updateCountdown() {
             const now = new Date();
-            const targetTime = new Date('2024-06-13T10:00:00');
+            const targetTime = new Date('2025-06-13T10:00:00+05:30'); // Specifying IST timezone for 2025
 
             const diff = targetTime - now;
             
