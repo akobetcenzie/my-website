@@ -277,15 +277,51 @@
         .flatpickr-day:hover {
             background: rgba(255, 75, 110, 0.2) !important;
         }
+
+        /* Add styles for the countdown timer */
+        .countdown-container {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+            background: rgba(255, 75, 110, 0.2);
+            padding: 0.8rem;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: pulse-subtle 2s infinite;
+        }
+
+        .countdown-text {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .countdown-timer {
+            font-family: monospace;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <div class="countdown-container">
+        <div class="countdown-text">⚠️ This site will automatically get removed at 3 PM IST ⚠️</div>
+        <div class="countdown-timer" id="countdown">Loading...</div>
+    </div>
     <div class="hearts" id="hearts"></div>
     <div class="container">
         <div class="lock-icon">🔒</div>
         <h1>This is protected by a date lock! 👀</h1>
         <div class="date-field-wrapper">
-            <span class="date-field-label">select a date</span>
+            <span class="date-field-label">select a special date to unlock</span>
             <input type="text" 
                    id="datePicker" 
                    class="date-picker" 
@@ -299,6 +335,33 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        // Add countdown timer functionality
+        function updateCountdown() {
+            const now = new Date();
+            
+            // Create target time in IST
+            const targetTime = new Date();
+            targetTime.setUTCHours(9, 30, 0); // 15:00 IST = 09:30 UTC
+            
+            // If it's past 3 PM IST today, set for tomorrow
+            if (now > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1);
+            }
+
+            const diff = targetTime - now;
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+
         document.addEventListener('DOMContentLoaded', function() {
             const input = document.getElementById('datePicker');
             const placeholder = document.querySelector('.placeholder-text');
@@ -331,8 +394,8 @@
                     if (dateStr === specialDate) {
                         createHeartAnimation();
                         setTimeout(() => {
-                            window.location.href = "wish.html";
-                        }, 3000);
+                            window.location.href = "encryptedwish.html";
+                        }, 2000);
                     } else {
                         errorMessage.style.display = "block";
                         setTimeout(() => {
