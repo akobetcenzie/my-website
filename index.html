@@ -128,6 +128,7 @@
             line-height: 1;
             text-transform: lowercase;
             letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .date-picker {
@@ -313,7 +314,7 @@
 </head>
 <body>
     <div class="countdown-container">
-        <div class="countdown-text">⚠️ This site will automatically get removed at 3 PM IST ⚠️</div>
+        <div class="countdown-text">⚠️ This site will automatically get removed on June 13th, 10:00 AM ⚠️</div>
         <div class="countdown-timer" id="countdown">Loading...</div>
     </div>
     <div class="hearts" id="hearts"></div>
@@ -321,7 +322,7 @@
         <div class="lock-icon">🔒</div>
         <h1>This is protected by a date lock! 👀</h1>
         <div class="date-field-wrapper">
-            <span class="date-field-label">select a special date to unlock</span>
+            <span class="date-field-label">select special date to unlock</span>
             <input type="text" 
                    id="datePicker" 
                    class="date-picker" 
@@ -338,24 +339,22 @@
         // Add countdown timer functionality
         function updateCountdown() {
             const now = new Date();
-            
-            // Create target time in IST
-            const targetTime = new Date();
-            targetTime.setUTCHours(9, 30, 0); // 15:00 IST = 09:30 UTC
-            
-            // If it's past 3 PM IST today, set for tomorrow
-            if (now > targetTime) {
-                targetTime.setDate(targetTime.getDate() + 1);
-            }
+            const targetTime = new Date('2024-06-13T10:00:00');
 
             const diff = targetTime - now;
             
-            const hours = Math.floor(diff / (1000 * 60 * 60));
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = "Time's up!";
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
             document.getElementById('countdown').innerHTML = 
-                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
         }
 
         // Update countdown every second
